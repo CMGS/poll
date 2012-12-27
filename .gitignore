@@ -1,0 +1,7 @@
+venv
+permdir
+tmpdir
+*.pyc
+dev.yaml
+syncdb_dumps.bak
+local_config.py
