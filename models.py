@@ -10,9 +10,8 @@ def init_db(app):
     db.app = app
     db.create_all()
 
-
 class Subject(db.Model):
-    __tablename__ = 'subjects'
+    __tablename__ = 'subject'
     id = db.Column('id', db.Integer, primary_key=True, autoincrement=True)
     topic = db.Column(db.CHAR(16), nullable=False)
     deadline = db.Column(db.DateTime, nullable=False)
@@ -56,3 +55,17 @@ class Vote(db.Model):
         db.session.commit()
         return self
 
+class Group(db.Model):
+    __tablename__ = 'group'
+    id = db.Column('id', db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.CHAR(16), nullable=False)
+
+    def __init__(self, name):
+        self.name = name
+
+    @staticmethod
+    def create(name):
+        group = Group(name)
+        db.session.add(group)
+        db.session.commit()
+        return group
