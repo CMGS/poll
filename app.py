@@ -1,3 +1,8 @@
+from flask import Flask
 
-def app(e, s):
-    yield 'hello world'
+app = Flask(__name__)
+
+@app.route('/')
+def index():
+    return 'Hello World'
+
