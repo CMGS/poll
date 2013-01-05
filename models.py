@@ -33,7 +33,7 @@ class Subject(db.Model):
     id = db.Column('id', db.Integer, primary_key=True, autoincrement=True)
     topic = db.Column(db.CHAR(16), nullable=False)
     deadline = db.Column(db.Date, nullable=False)
-    votetype = db.Column(db.Integer, nullable=False, default=1)
+    votetype = db.Column(db.Integer, nullable=False, default=0)
     group = db.Column(db.Integer, db.ForeignKey(Group.id))
     groupname = db.relationship(Group, backref='subject')
 
