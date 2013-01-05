@@ -1,4 +1,4 @@
-application: poll
+application: poll2
 version: 1
 irc_report_channel: dae
 report_observer_emails: pengzhefu@douban.com
