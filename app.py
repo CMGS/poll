@@ -3,7 +3,10 @@ import logging
 from flask import Flask, redirect, url_for, \
         g, request, render_template
 
-from dae.api.users import get_current_user, create_login_url
+from sheep.api.users import get_current_user, \
+        generate_login_url
+from sheep.api.sessions import SessionMiddleware, \
+    FilesystemSessionStore
 
 from models import init_db
 from query import get_subjects, get_votes, \
@@ -25,6 +28,10 @@ app.jinja_env.globals['votetype'] = votetype
 
 logger = logging.getLogger(__name__)
 init_db(app)
+app.wsgi_app = SessionMiddleware(app.wsgi_app, \
+        FilesystemSessionStore(), \
+        cookie_name=config.SESSION_KEY, cookie_path='/', \
+        cookie_domain=config.SESSION_COOKIE_DOMAIN)
 
 @app.route('/')
 def index():
@@ -65,8 +72,8 @@ def write():
 
 @app.before_request
 def before():
-    user = get_current_user()
+    user = get_current_user(request.environ['xiaomen.session'])
     if not user:
-        return redirect(create_login_url())
+        return redirect(generate_login_url())
     g.user = user
 

@@ -4,3 +4,5 @@
 DEBUG = True
 DATABASE_URI = 'mysql://'
 SECRET_KEY = '!@$vote!#$%^'
+SESSION_KEY = 'xid'
+SESSION_COOKIE_DOMAIN = '127.0.0.1'
