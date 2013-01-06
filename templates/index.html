@@ -4,13 +4,19 @@ Hello {{ user.username }}
     <li><a href="{{ url_for('index', q=g.id) }}">{{ g.name }}</a></li>
 {% endfor %}
 </ul>
-<h4> subjects </h4>
+{% if group %}
+<h4>{{ group.name }}'s subjects</h4>
+{% else %}
+<h4> all subjects </h4>
+{% endif %}
 <ul>
 {% for s in subjects %}
 <li>
     <a href="{{ url_for('view', sid=s.id) }}">{{ s.topic }}</a>
     {% if outdate(s.deadline) %}
     <b> outdate </b>
+    {% else %}
+    <b> deadline: {{ s.deadline }} </b>
     {% endif %}
 </li>
 {% endfor %}

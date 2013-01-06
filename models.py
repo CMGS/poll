@@ -35,7 +35,7 @@ class Subject(db.Model):
     deadline = db.Column(db.Date, nullable=False)
     votetype = db.Column(db.Integer, nullable=False, default=0)
     group = db.Column(db.Integer, db.ForeignKey(Group.id))
-    groupname = db.relationship(Group, backref='subject')
+    groupobj = db.relationship(Group, backref='subject')
 
     def __init__(self, **kwargs):
         for k, v in kwargs.iteritems():
