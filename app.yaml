@@ -4,5 +4,11 @@ irc_report_channel: dae
 report_observer_emails: pengzhefu@douban.com
 
 handlers:
+- url: /static/(.*)
+  static_files: static/\1
+  upload: static/.*
+
+handlers:
 - url: /.*
   wsgi_app: app:app
+

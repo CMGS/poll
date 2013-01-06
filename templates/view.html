@@ -10,7 +10,7 @@
         <p>
             {{ v.content }} count: {{ v.count }}
             {% if subject.votetype == 1 %}
-            <input type="checkbox" name="selected" value="{{ v.id }}">
+            <input type="checkbox" name="selected" value="{{ v.id }}" />
             {% else %}
             <input type="radio" name="selected" value="{{ v.id }}" />
             {% endif %}

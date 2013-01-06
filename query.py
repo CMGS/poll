@@ -1,7 +1,7 @@
 #!/usr/local/bin/python2.7
 #coding:utf-8
 
-from models import Subject, Vote
+from models import Subject, Vote, Group
 
 def get_subjects(q):
     if not q:
@@ -10,6 +10,9 @@ def get_subjects(q):
 
 def get_votes(sid):
     return Vote.query.filter_by(sid=sid).all()
+
+def get_groups():
+    return Group.query.all()
 
 def update_votes(votes):
     for vid in votes:

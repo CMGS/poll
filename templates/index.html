@@ -1,8 +1,18 @@
+Hello {{ user.username }}
+<ul>
+{% for g in groups %}
+    <li><a href="{{ url_for('index', q=g.id) }}">{{ g.name }}</a></li>
+{% endfor %}
+</ul>
+<h4> subjects </h4>
+<ul>
 {% for s in subjects %}
-<p>
+<li>
     <a href="{{ url_for('view', sid=s.id) }}">{{ s.topic }}</a>
     {% if outdate(s.deadline) %}
     <b> outdate </b>
     {% endif %}
-</p>
+</li>
 {% endfor %}
+</ul>
+<a href="{{ url_for('write') }}"> create </a>

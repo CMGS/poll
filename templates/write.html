@@ -1,0 +1,43 @@
+<html>
+<head>
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css" />
+<script type="text/javascript" src="/static/js/jquery.js"></script>
+<script type="text/javascript" src="/static/js/jquery-ui.js"></script>
+<script>
+    $(function() {
+        $("#deadline").datepicker({ dateFormat: "yy-mm-dd", constrainInput: true,
+            closeText: "Close", minDate: 1 });
+    });
+</script>
+</head>
+Hello {{ user.username }}
+<form method="POST" action="{{ url_for('write')}}">
+    <label for="group">Organization:</label>
+    <select id="group" name="group">
+        {% for g in groups %}
+        <option value="{{ g.id }}">{{ g.name }}</option>
+        {% endfor %}
+    </select>
+    <br />
+    <label for="topic">Topic:</label>
+    <input id="topic" type="text" name="topic" />
+    <br />
+    <label for="deadline">Deadline:</label>
+    <input id="deadline" type="text" name="deadline" />
+    <br />
+    <label for="votetype">Vote Type:</label>
+    <select id="votetype" name="votetype">
+        <option value="0">single</option>
+        <option value="1">multiple</option>
+    </select>
+    <br />
+    <label for="options">Options:</label>
+    <ul id="options">
+        <li><input name="options" type="text" /></li>
+        <li><input name="options" type="text" /></li>
+        <li><input name="options" type="text" /></li>
+    </ul>
+    <br />
+    <button type="submit">create</button>
+</form>
+</html>
