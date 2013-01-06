@@ -43,7 +43,8 @@ class Subject(db.Model):
 
     @staticmethod
     def create(topic, deadline, votetype, group):
-        subject = Subject(topic, deadline, votetype, group)
+        subject = Subject(topic=topic, deadline=deadline, \
+                votetype=votetype, group=group)
         db.session.add(subject)
         db.session.commit()
         return subject
@@ -64,8 +65,8 @@ class Vote(db.Model):
             setattr(self, k, v)
 
     @staticmethod
-    def create(tid, content):
-        vote = Vote(tid=tid, content=content)
+    def create(sid, content):
+        vote = Vote(sid=sid, content=content)
         db.session.add(vote)
         db.session.commit()
         return vote

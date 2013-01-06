@@ -7,7 +7,7 @@ from dae.api.users import get_current_user, create_login_url
 
 from models import init_db
 from query import get_subjects, get_votes, \
-        update_votes, get_groups
+        update_votes, get_groups, create_subject
 from utils import outdate, votetype
 
 app = Flask(__name__)
@@ -45,7 +45,7 @@ def view(sid):
 def vote(sid):
     votes = request.form
     if votes:
-        update_votes(votes.listvalues()[0])
+        update_votes(votes.getlist('selected'))
     return redirect(url_for('view', sid=sid))
 
 @app.route('/write/', methods=['GET', 'POST'])
@@ -53,7 +53,13 @@ def write():
     if request.method == 'GET':
         return render_template('write.html', user=g.user, \
                 groups=get_groups())
-    return
+    topic = request.form.get('topic')
+    group = request.form.get('group')
+    deadline = request.form.get('deadline')
+    votetype = request.form.get('votetype')
+    options = request.form.getlist('options')
+    create_subject(topic, group, deadline, votetype, options)
+    return redirect(url_for('index', q=group))
 
 @app.before_request
 def before():

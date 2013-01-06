@@ -7,12 +7,16 @@
     $(function() {
         $("#deadline").datepicker({ dateFormat: "yy-mm-dd", constrainInput: true,
             closeText: "Close", minDate: 1 });
+        $("#add").click(function(){
+            $("#options").append("<li><input name=\"options\" type=\"text\" /></li>");
+            return false;
+        });
     });
 </script>
 </head>
 Hello {{ user.username }}
 <form method="POST" action="{{ url_for('write')}}">
-    <label for="group">Organization:</label>
+    <label for="group">Group:</label>
     <select id="group" name="group">
         {% for g in groups %}
         <option value="{{ g.id }}">{{ g.name }}</option>
@@ -37,7 +41,7 @@ Hello {{ user.username }}
         <li><input name="options" type="text" /></li>
         <li><input name="options" type="text" /></li>
     </ul>
-    <br />
+    <button id="add">add options</button>
     <button type="submit">create</button>
 </form>
 </html>
