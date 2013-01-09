@@ -60,7 +60,7 @@ def write():
     deadline = request.form.get('deadline')
     votetype = request.form.get('votetype')
     options = request.form.getlist('options')
-    create_subject(topic, group, deadline, votetype, options)
+    create_subject(topic, group, deadline, votetype, options, g.user.name)
     return redirect(url_for('index', q=group))
 
 @app.before_request
