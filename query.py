@@ -25,7 +25,7 @@ def update_votes(votes):
         vote = Vote.query.get(vid)
         vote.incr()
 
-def create_subject(topic, group, deadline, votetype, options):
+def create_subject(topic, group, deadline, votetype, options, creator):
     if not get_group(group):
         raise Exception('Group not exist')
     if votetype not in ['0', '1']:
@@ -33,7 +33,7 @@ def create_subject(topic, group, deadline, votetype, options):
     options = [o for o in options if o]
     if not options:
         raise Exception('No options')
-    subject = Subject.create(topic, deadline, votetype, group)
+    subject = Subject.create(topic, deadline, votetype, group, creator)
     for option in options:
         Vote.create(subject.id, option)
 
