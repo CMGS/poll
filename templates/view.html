@@ -1,4 +1,4 @@
-<h3>{{ subject.groupobj.name }}</h3>
+<h3>{{ subject.groupobj.name }} {{ subject.creator }}</h3>
 <p>{{ subject.topic }}, <b>{{ votetype(subject.votetype) }}</b></p>
 {% if outdate(subject.deadline) %}
     {% for v in votes %}
