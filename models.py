@@ -33,6 +33,7 @@ class Subject(db.Model):
     id = db.Column('id', db.Integer, primary_key=True, autoincrement=True)
     topic = db.Column(db.CHAR(16), nullable=False)
     deadline = db.Column(db.Date, nullable=False)
+    creator = db.Column(db.CHAR(16), nullable=False)
     votetype = db.Column(db.Integer, nullable=False, default=0)
     group = db.Column(db.Integer, db.ForeignKey(Group.id))
     groupobj = db.relationship(Group, backref='subject')
@@ -42,9 +43,10 @@ class Subject(db.Model):
             setattr(self, k, v)
 
     @staticmethod
-    def create(topic, deadline, votetype, group):
+    def create(topic, deadline, votetype, group, creator):
         subject = Subject(topic=topic, deadline=deadline, \
-                votetype=votetype, group=group)
+                votetype=votetype, group=group, \
+                creator=creator)
         db.session.add(subject)
         db.session.commit()
         return subject
