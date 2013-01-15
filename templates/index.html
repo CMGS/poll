@@ -1,25 +1,44 @@
-Hello {{ user.name }}
-<ul>
-    <li><a href="{{ url_for('index') }}">All</a></li>
-{% for g in groups %}
-    <li><a href="{{ url_for('index', q=g.id) }}">{{ g.name }}</a></li>
-{% endfor %}
-</ul>
-{% if group %}
-<h4>{{ group.name }}'s subjects</h4>
-{% else %}
-<h4> all subjects </h4>
-{% endif %}
-<ul>
-{% for s in subjects %}
-<li>
-    <a href="{{ url_for('view', sid=s.id) }}">{{ s.topic }}</a>
-    {% if outdate(s.deadline) %}
-    <b> outdate </b>
-    {% else %}
-    <b> deadline: {{ s.deadline }} </b>
+{% extends "layout.html" %}
+
+{% block content %}
+<!-- <section class="inprogress">
+    <h2 class="section-title dashed">IN PROGRESS</h2>
+    <ul class="poll-list">
+        {% for s in inprogress %}
+        <li>
+            <a href="{{ url_for('view', sid=s.id) }}">{{ s.topic }}</a>
+        </li>
+        {% endfor %}
+    </ul>
+</section>
+<section class="closed">
+    <h2 class="section-title dashed">CLOSED</h2> 
+    <ul class="poll-list">
+        {% for s in closed %}
+        <li>
+            <a href="{{ url_for('view', sid=s.id) }}">{{ s.topic }}</a>
+        </li>
+        {% endfor %}
+    </ul>
+    </section>-->
+    {% if inprogress %}
+    <div class="subtitle">
+        <h2>IN PROGRESS</h2>
+    </div>
+    <ul class="poll-list inprogress">
+        {% for s in inprogress %}
+        <li><a href="{{ url_for('view', sid = s.id) }}">{{ s.topic }}</a></li>
+        {% endfor %}
+    </ul>
     {% endif %}
-</li>
-{% endfor %}
-</ul>
-<a href="{{ url_for('write') }}"> create </a>
+    {% if closed %}
+    <div class="subtitle closed">
+        <h2>CLOSED</h2>
+    </div>
+    <ul class="poll-list closed">
+        {% for s in closed %}
+        <li><a href="{{ url_for('view', sid = s.id) }}">{{ s.topic }}</a></li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+{% endblock %}

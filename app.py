@@ -36,8 +36,10 @@ app.wsgi_app = SessionMiddleware(app.wsgi_app, \
 @app.route('/')
 def index():
     q = request.args.get('q', '')
+    inprogress, closed = get_subjects(q)
     return render_template('index.html', user=g.user, \
-            subjects=get_subjects(q), \
+            inprogress = inprogress, \
+            closed = closed, \
             groups=get_groups(), \
             group=get_group(q))
 
@@ -47,8 +49,9 @@ def view(sid):
     if not votes:
         return redirect(url_for('index'))
     subject = votes[0].subject
+    sum_count = sum([v.count for v in votes])
     return render_template('view.html', subject=subject, \
-            votes=votes)
+            votes=votes, sum = sum_count)
 
 @app.route('/vote/<int:sid>/', methods=['POST'])
 def vote(sid):

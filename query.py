@@ -1,13 +1,19 @@
 #!/usr/local/bin/python2.7
 #coding:utf-8
 
+import datetime
 from models import Subject, Vote, Group
 from sqlalchemy.sql.expression import asc
 
 def get_subjects(q):
+    today = datetime.date.today()
     if not q:
-        return Subject.query.order_by(asc(Subject.deadline)).all()
-    return Subject.query.filter_by(group=q).order_by(asc(Subject.deadline)).all()
+        inprogress = Subject.query.filter(Subject.deadline >= today).order_by(asc(Subject.deadline)).all()
+        closed = Subject.query.filter(Subject.deadline < today).order_by(asc(Subject.deadline)).all() 
+        return inprogress, closed
+    inprogress = Subject.query.filter_by(group=q).filter(Subject.deadline >= today).order_by(asc(Subject.deadline)).all()
+    closed = Subject.query.filter_by(group=q).filter(Subject.deadline < today).order_by(asc(Subject.deadline)).all()
+    return inprogress, closed
 
 def get_votes(sid):
     return Vote.query.filter_by(sid=sid).all()
