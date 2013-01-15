@@ -49,8 +49,9 @@ def view(sid):
     if not votes:
         return redirect(url_for('index'))
     subject = votes[0].subject
+    sum_count = sum([v.count for v in votes])
     return render_template('view.html', subject=subject, \
-            votes=votes)
+            votes=votes, sum = sum_count)
 
 @app.route('/vote/<int:sid>/', methods=['POST'])
 def vote(sid):

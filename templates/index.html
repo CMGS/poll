@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block content %}
-<section class="inprogress">
+<!-- <section class="inprogress">
     <h2 class="section-title dashed">IN PROGRESS</h2>
     <ul class="poll-list">
         {% for s in inprogress %}
@@ -20,5 +20,25 @@
         </li>
         {% endfor %}
     </ul>
-</section>
+    </section>-->
+    {% if inprogress %}
+    <div class="subtitle">
+        <h2>IN PROGRESS</h2>
+    </div>
+    <ul class="poll-list inprogress">
+        {% for s in inprogress %}
+        <li><a href="{{ url_for('view', sid = s.id) }}">{{ s.topic }}</a></li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    {% if closed %}
+    <div class="subtitle closed">
+        <h2>CLOSED</h2>
+    </div>
+    <ul class="poll-list closed">
+        {% for s in closed %}
+        <li><a href="{{ url_for('view', sid = s.id) }}">{{ s.topic }}</a></li>
+        {% endfor %}
+    </ul>
+    {% endif %}
 {% endblock %}

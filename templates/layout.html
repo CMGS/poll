@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8" />
     <title>{% block title %}Home{% endblock %} - Poll</title>
-    <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro' rel='stylesheet' type='text/css'>    
+    <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,400' rel='stylesheet' type='text/css'>    
     <link rel="stylesheet" href="/static/css/normalize.min.css" type="text/css" />
     <link rel="stylesheet" href="/static/css/style.css" type="text/css" />
+    {% block head %}{% endblock %}
 </head>
 <body>
 <!--<header class="clearfix">
@@ -15,22 +16,31 @@
     </div>
 </header>-->
 <header>
-    <div class="rainbow-line">
+<!--    <div class="rainbow-line">
         <span class="rainbow-color grape"></span>
         <span class="rainbow-color sky"></span>
         <span class="rainbow-color gress"></span>
         <span class="rainbow-color sun"></span>
         <span class="rainbow-color fire"></span>
-        <!-- <span class="rainbow-color air">air is transparent.</span> -->
-    </div>
-    <hgroup>
+        <!- <span class="rainbow-color air">air is transparent.</span> ->
+    </div>-->
+<!--    <hgroup>
         <h1>Poll</h1>
-    </hgroup>
+        </hgroup>-->
 </header>
-<div class="wrap">
+<!-- <div class="wrap">
     <a href="{{ url_for('write') }}" class="create">Create</a>
     <div class="clearfix"></div>
-{% block content %}{% endblock %}
+{#% block content %}{% endblock %#}
+</div> -->
+<div class="wrap">
+    <div class="title-and-create">
+        {% if not write %}
+        <a class="r plus-btn" href="{{ url_for('write') }}">Create</a>
+        {% endif %}
+        <h1><a href="/">Poll</a></h1>
+    </div>
+    {% block content %}{% endblock %}
 </div>
 </body>
 </html>
