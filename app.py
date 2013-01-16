@@ -33,6 +33,8 @@ app.wsgi_app = SessionMiddleware(app.wsgi_app, \
         cookie_name=config.SESSION_KEY, cookie_path='/', \
         cookie_domain=config.SESSION_COOKIE_DOMAIN)
 
+#TODO in sheep env, do not use user.name!use user.uid!
+
 @app.route('/')
 def index():
     q = request.args.get('q', '')
