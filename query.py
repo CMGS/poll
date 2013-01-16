@@ -8,6 +8,7 @@ from sqlalchemy.sql.expression import asc
 
 def get_subjects(q):
     today = datetime.date.today()
+    q = int(q)
     if not q:
         inprogress = Subject.query.filter(Subject.deadline >= today).order_by(asc(Subject.deadline)).all()
         closed = Subject.query.filter(Subject.deadline < today).order_by(asc(Subject.deadline)).all() 

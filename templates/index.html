@@ -4,10 +4,11 @@
 <script type="text/javascript" src="/static/js/jquery.js"></script>
 <script language="javascript" type="text/javascript">
 $(document).ready(function(){
-$('#group').change(function(){
+$('#groups').change(function(){
   var q=$(this).children('option:selected').val();
   window.location.href="/?q="+q;
-  })
+  });
+$("#groups option[value={{ q }}]").attr('selected','selected');
 })
 </script>
 
@@ -15,7 +16,7 @@ $('#group').change(function(){
 
 {% block content %}
 <div class="group-list">
-    <select id="group">
+    <select id="groups">
         <option value ="0">all</option>
         {% for g in groups %}
         <option value ="{{ g.id }}">{{ g.name }}</option>

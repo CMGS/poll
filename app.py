@@ -29,13 +29,14 @@ init_db(app)
 
 @app.route('/')
 def index():
-    q = request.args.get('q', '')
+    q = request.args.get('q', 0)
     inprogress, closed = get_subjects(q)
     return render_template('index.html', user=g.user, \
             inprogress = inprogress, \
             closed = closed, \
             groups=get_groups(), \
-            group=get_group(q))
+            group=get_group(q), \
+            q=q)
 
 @app.route('/view/<int:sid>/')
 def view(sid):
