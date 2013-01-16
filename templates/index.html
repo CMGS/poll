@@ -6,7 +6,11 @@
 $(document).ready(function(){
 $('#groups').change(function(){
   var q=$(this).children('option:selected').val();
-  window.location.href="/?q="+q;
+  if (q==='0') {
+    window.location.href="/";
+  } else {
+    window.location.href="/?q="+q;
+  }
   });
 $("#groups option[value={{ q }}]").attr('selected','selected');
 })
