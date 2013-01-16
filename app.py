@@ -51,7 +51,7 @@ def view(sid):
 def vote(sid):
     votes = request.form
     if votes:
-        update_votes(votes.getlist('selected'))
+        update_votes(sid, votes.getlist('selected'))
     return redirect(url_for('view', sid=sid))
 
 @app.route('/write/', methods=['GET', 'POST'])
@@ -64,8 +64,12 @@ def write():
     deadline = request.form.get('deadline')
     votetype = request.form.get('votetype')
     options = request.form.getlist('options')
-    create_subject(topic, group, deadline, votetype, options, g.user.username)
-    return redirect(url_for('index', q=group))
+    try:
+        create_subject(topic, group, deadline, votetype, options, g.user.username)
+    except Exception, e:
+        return str(e)
+    else:
+        return redirect(url_for('index', q=group))
 
 @app.before_request
 def before():
