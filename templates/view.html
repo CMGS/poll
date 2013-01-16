@@ -36,12 +36,17 @@
         <li class="line poll-option">
             <div class="poll-count" {% if sum %}style="width: {{ v.count / sum * 600 }}px"{% endif %}></div>
             <span class="poll-count-num r">{{ v.count }}</span>
-            <label>{{ get_vote_checkbox(subject.votetype, v.id) }} {{ v.content }}</label>
+            <label>
+                {% if not ban %}
+                {{ get_vote_checkbox(subject.votetype, v.id) }}
+                {% endif %}
+                {{ v.content }}
+            </label>
         </li>
     {% endfor %}
     </ul>
     <div class="form-action">
-        {% if isban(subject.id, g.user.username) %}
+        {% if ban %}
         <a href="{{ url_for('index', q=q) }}">Voted, Back</button>
         {% else %}
         <button type="submit">Vote</button>

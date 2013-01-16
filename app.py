@@ -9,8 +9,8 @@ from dae.api.users import get_current_user, \
 from models import init_db
 from query import get_subjects, get_votes, \
         update_votes, get_groups, get_group, \
-        create_subject
-from utils import outdate, votetype, isban
+        create_subject, get_ban
+from utils import outdate, votetype
 
 app = Flask(__name__)
 app.debug = config.DEBUG
@@ -21,7 +21,6 @@ app.config.update(
     SQLALCHEMY_POOL_TIMEOUT = 10,
     SQLALCHEMY_POOL_RECYCLE = 3600,
 )
-app.jinja_env.globals['isban'] = isban
 app.jinja_env.globals['outdate'] = outdate
 app.jinja_env.globals['votetype'] = votetype
 
@@ -47,9 +46,10 @@ def view(sid):
     subject = votes[0].subject
     q = '' or subject.groupobj.id
     sum_count = sum([v.count for v in votes])
+    ban = get_ban(subject.id, g.user.username)
     return render_template('view.html', subject=subject, \
             votes=votes, sum = sum_count, q = q, \
-            msg = msg)
+            msg = msg, ban = ban)
 
 @app.route('/vote/<int:sid>/', methods=['POST'])
 def vote(sid):

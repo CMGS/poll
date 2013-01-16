@@ -3,10 +3,6 @@
 
 import datetime
 
-def isban(sid, name):
-    from query import get_ban
-    return bool(get_ban(sid, name))
-
 def outdate(date):
     return datetime.date.today() > date
 

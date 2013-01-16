@@ -4,7 +4,7 @@
 import datetime
 from utils import outdate
 from models import Subject, Vote, Group, Ban
-from sqlalchemy.sql.expression import asc, and_
+from sqlalchemy.sql.expression import asc
 
 def get_subjects(q):
     today = datetime.date.today()
