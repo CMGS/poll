@@ -3,8 +3,8 @@
 
 import datetime
 from utils import outdate
-from models import Subject, Vote, Group
-from sqlalchemy.sql.expression import asc
+from models import Subject, Vote, Group, Ban
+from sqlalchemy.sql.expression import asc, and_
 
 def get_subjects(q):
     today = datetime.date.today()
@@ -27,13 +27,19 @@ def get_group(gid):
         return None
     return Group.query.get(gid)
 
-def update_votes(sid, votes):
+def get_ban(sid, name):
+    ret = Ban.query.filter(Ban.sid==sid, Ban.name==name).limit(1).first()
+    if ret:
+        raise Exception('Oops, vote once plz')
+
+def update_votes(sid, votes, name):
     subject = Subject.query.get(sid)
     if not subject or outdate(subject.deadline):
         raise Exception('Invaild Subject')
     for vid in votes:
         vote = Vote.query.get(vid)
         vote.incr()
+    Ban.create(sid, name)
 
 def create_subject(topic, group, deadline, votetype, options, creator):
     if not topic:
@@ -44,7 +50,7 @@ def create_subject(topic, group, deadline, votetype, options, creator):
         raise Exception('Vote type error')
     options = [o for o in options if o]
     if len(options) < 2:
-        raise Exception('No options')
+        raise Exception('Invaild options number')
     subject = Subject.create(topic, deadline, votetype, group, creator)
     for option in options:
         Vote.create(subject.id, option)

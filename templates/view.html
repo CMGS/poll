@@ -24,9 +24,12 @@
     {% endfor %}
 </ul>
 <div class="form-action">
-    <a href="/">Back</button>
+    <a href="{{ url_for('index', q=q) }}">Back</button>
 </div>
 {% else %}
+{% if msg %}
+<div style="text-align:center;background: red;color:white;"> {{ msg }}</div>
+{% endif %}
 <form method="post" action="{{ url_for('vote', sid=subject.id) }}" >
     <ul class="poll-options">
     {% for v in votes %}

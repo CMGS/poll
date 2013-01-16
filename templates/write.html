@@ -20,6 +20,9 @@
 {% endblock %}
 
 {% block content %}
+{% if exc %}
+<div style="text-align:center;background: red;color:white;"> {{ exc }}</div>
+{% endif %}
 <form method="POST" action="{{ url_for('write')}}">
     <div class="control-group clearfix">
         <div class="control-label">

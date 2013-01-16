@@ -83,7 +83,7 @@ class Ban(db.Model):
     __tablename__ = 'ban'
     id = db.Column('id', db.Integer, primary_key=True, autoincrement=True)
     sid = db.Column(db.Integer, db.ForeignKey(Subject.id))
-    subject = db.relationship(Subject, backref='vote')
+    subject = db.relationship(Subject, backref='ban')
     name = db.Column(db.CHAR(16), nullable=False)
 
     def __init__(self, **kwargs):
@@ -96,5 +96,4 @@ class Ban(db.Model):
         db.session.add(ban)
         db.session.commit()
         return ban
-
 

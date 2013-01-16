@@ -9,7 +9,7 @@ from dae.api.users import get_current_user, \
 from models import init_db
 from query import get_subjects, get_votes, \
         update_votes, get_groups, get_group, \
-        create_subject
+        create_subject, get_ban
 from utils import outdate, votetype
 
 app = Flask(__name__)
@@ -40,19 +40,27 @@ def index():
 @app.route('/view/<int:sid>/')
 def view(sid):
     votes = get_votes(sid)
+    msg = request.args.get('msg', '')
     if not votes:
         return redirect(url_for('index'))
     subject = votes[0].subject
+    q = '' or subject.groupobj.id
     sum_count = sum([v.count for v in votes])
     return render_template('view.html', subject=subject, \
-            votes=votes, sum = sum_count)
+            votes=votes, sum = sum_count, q = q, \
+            msg = msg)
 
 @app.route('/vote/<int:sid>/', methods=['POST'])
 def vote(sid):
     votes = request.form
-    if votes:
-        update_votes(sid, votes.getlist('selected'))
-    return redirect(url_for('view', sid=sid))
+    msg = ''
+    try:
+        get_ban(sid, g.user.username)
+        if votes:
+            update_votes(sid, votes.getlist('selected'), g.user.username)
+    except Exception, e:
+        msg = str(e)
+    return redirect(url_for('view', sid=sid, msg=msg))
 
 @app.route('/write/', methods=['GET', 'POST'])
 def write():
@@ -67,7 +75,8 @@ def write():
     try:
         create_subject(topic, group, deadline, votetype, options, g.user.username)
     except Exception, e:
-        return str(e)
+        return render_template('write.html', user=g.user, \
+                groups=get_groups(), exc=str(e))
     else:
         return redirect(url_for('index', q=group))
 
