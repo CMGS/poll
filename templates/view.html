@@ -28,7 +28,7 @@
 </div>
 {% else %}
 {% if msg %}
-<div style="text-align:center;background: red;color:white;"> {{ msg }}</div>
+<div class="msg">{{ msg }}</div>
 {% endif %}
 <form method="post" action="{{ url_for('vote', sid=subject.id) }}" >
     <ul class="poll-options">

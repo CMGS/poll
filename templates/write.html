@@ -21,7 +21,7 @@
 
 {% block content %}
 {% if exc %}
-<div style="text-align:center;background: red;color:white;"> {{ exc }}</div>
+<div class='msg'>{{ exc }}</div>
 {% endif %}
 <form method="POST" action="{{ url_for('write')}}">
     <div class="control-group clearfix">
