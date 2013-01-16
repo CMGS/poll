@@ -346,3 +346,15 @@ hgroup h1 {
 .poll-option:hover .poll-count {
     background-color: #EAEAEA; 
 }
+
+.msg {
+    padding: 5px 20px;
+    background-color: #F3C2AF;
+    color: #D12C2C;
+}
+
+.group-list {
+    padding: 5px 20px;
+    background-color: #D9EDF7;
+    color: #3A87AD;
+}

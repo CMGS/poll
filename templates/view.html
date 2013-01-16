@@ -24,21 +24,33 @@
     {% endfor %}
 </ul>
 <div class="form-action">
-    <a href="/">Back</button>
+    <a href="{{ url_for('index', q=q) }}">Back</button>
 </div>
 {% else %}
+{% if msg %}
+<div class="msg">{{ msg }}</div>
+{% endif %}
 <form method="post" action="{{ url_for('vote', sid=subject.id) }}" >
     <ul class="poll-options">
     {% for v in votes %}
         <li class="line poll-option">
             <div class="poll-count" {% if sum %}style="width: {{ v.count / sum * 600 }}px"{% endif %}></div>
             <span class="poll-count-num r">{{ v.count }}</span>
-            <label>{{ get_vote_checkbox(subject.votetype, v.id) }} {{ v.content }}</label>
+            <label>
+                {% if not ban %}
+                {{ get_vote_checkbox(subject.votetype, v.id) }}
+                {% endif %}
+                {{ v.content }}
+            </label>
         </li>
     {% endfor %}
     </ul>
     <div class="form-action">
+        {% if ban %}
+        <a href="{{ url_for('index', q=q) }}">Voted, Back</button>
+        {% else %}
         <button type="submit">Vote</button>
+        {% endif %}
     </div>
 </form>
 {% endif %}

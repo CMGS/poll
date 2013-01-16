@@ -11,7 +11,7 @@ from sheep.api.sessions import SessionMiddleware, \
 from models import init_db
 from query import get_subjects, get_votes, \
         update_votes, get_groups, get_group, \
-        create_subject
+        create_subject, get_ban
 from utils import outdate, votetype
 
 app = Flask(__name__)
@@ -41,24 +41,32 @@ def index():
             inprogress = inprogress, \
             closed = closed, \
             groups=get_groups(), \
-            group=get_group(q))
+            group=get_group(q), \
+            q=q)
 
 @app.route('/view/<int:sid>/')
 def view(sid):
     votes = get_votes(sid)
+    msg = request.args.get('msg', '')
     if not votes:
         return redirect(url_for('index'))
     subject = votes[0].subject
+    q = '' or subject.groupobj.id
     sum_count = sum([v.count for v in votes])
+    ban = get_ban(subject.id, g.user.name)
     return render_template('view.html', subject=subject, \
-            votes=votes, sum = sum_count)
+            votes=votes, sum = sum_count, q = q, \
+            msg = msg, ban = ban)
 
 @app.route('/vote/<int:sid>/', methods=['POST'])
 def vote(sid):
     votes = request.form
-    if votes:
-        update_votes(votes.getlist('selected'))
-    return redirect(url_for('view', sid=sid))
+    msg = ''
+    try:
+        update_votes(sid, votes.getlist('selected'), g.user.name)
+    except Exception, e:
+        msg = str(e)
+    return redirect(url_for('view', sid=sid, msg=msg))
 
 @app.route('/write/', methods=['GET', 'POST'])
 def write():
@@ -70,8 +78,13 @@ def write():
     deadline = request.form.get('deadline')
     votetype = request.form.get('votetype')
     options = request.form.getlist('options')
-    create_subject(topic, group, deadline, votetype, options, g.user.name)
-    return redirect(url_for('index', q=group))
+    try:
+        create_subject(topic, group, deadline, votetype, options, g.user.name)
+    except Exception, e:
+        return render_template('write.html', user=g.user, \
+                groups=get_groups(), exc=str(e))
+    else:
+        return redirect(url_for('index', q=group))
 
 @app.before_request
 def before():

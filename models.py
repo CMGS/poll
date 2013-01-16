@@ -79,3 +79,21 @@ class Vote(db.Model):
         db.session.commit()
         return self
 
+class Ban(db.Model):
+    __tablename__ = 'ban'
+    id = db.Column('id', db.Integer, primary_key=True, autoincrement=True)
+    sid = db.Column(db.Integer, db.ForeignKey(Subject.id))
+    subject = db.relationship(Subject, backref='ban')
+    name = db.Column(db.CHAR(16), nullable=False)
+
+    def __init__(self, **kwargs):
+        for k, v in kwargs.iteritems():
+            setattr(self, k, v)
+
+    @staticmethod
+    def create(sid, name):
+        ban = Ban(sid=sid, name=name)
+        db.session.add(ban)
+        db.session.commit()
+        return ban
+

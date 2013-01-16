@@ -1,6 +1,32 @@
 {% extends "layout.html" %}
 
+{% block head %}
+<script type="text/javascript" src="/static/js/jquery.js"></script>
+<script language="javascript" type="text/javascript">
+$(document).ready(function(){
+$('#groups').change(function(){
+  var q=$(this).children('option:selected').val();
+  if (q==='0') {
+    window.location.href="/";
+  } else {
+    window.location.href="/?q="+q;
+  }
+  });
+$("#groups option[value={{ q }}]").attr('selected','selected');
+})
+</script>
+
+{% endblock %}
+
 {% block content %}
+<div class="group-list">
+    <select id="groups">
+        <option value ="0">all</option>
+        {% for g in groups %}
+        <option value ="{{ g.id }}">{{ g.name }}</option>
+        {% endfor %}
+    </select>
+</div>
 <!-- <section class="inprogress">
     <h2 class="section-title dashed">IN PROGRESS</h2>
     <ul class="poll-list">
