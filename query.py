@@ -28,14 +28,16 @@ def get_group(gid):
     return Group.query.get(gid)
 
 def get_ban(sid, name):
-    ret = Ban.query.filter(Ban.sid==sid, Ban.name==name).limit(1).first()
-    if ret:
-        raise Exception('Oops, vote once plz')
+    return Ban.query.filter(Ban.sid==sid, Ban.name==name).limit(1).first()
 
 def update_votes(sid, votes, name):
+    if not votes:
+        raise Exception('Invaild votes')
     subject = Subject.query.get(sid)
     if not subject or outdate(subject.deadline):
-        raise Exception('Invaild Subject')
+        raise Exception('Invaild subject')
+    if get_ban(sid, name):
+        raise Exception('Vote only once')
     for vid in votes:
         vote = Vote.query.get(vid)
         vote.incr()

@@ -9,8 +9,8 @@ from dae.api.users import get_current_user, \
 from models import init_db
 from query import get_subjects, get_votes, \
         update_votes, get_groups, get_group, \
-        create_subject, get_ban
-from utils import outdate, votetype
+        create_subject
+from utils import outdate, votetype, isban
 
 app = Flask(__name__)
 app.debug = config.DEBUG
@@ -21,6 +21,7 @@ app.config.update(
     SQLALCHEMY_POOL_TIMEOUT = 10,
     SQLALCHEMY_POOL_RECYCLE = 3600,
 )
+app.jinja_env.globals['isban'] = isban
 app.jinja_env.globals['outdate'] = outdate
 app.jinja_env.globals['votetype'] = votetype
 
@@ -55,9 +56,7 @@ def vote(sid):
     votes = request.form
     msg = ''
     try:
-        get_ban(sid, g.user.username)
-        if votes:
-            update_votes(sid, votes.getlist('selected'), g.user.username)
+        update_votes(sid, votes.getlist('selected'), g.user.username)
     except Exception, e:
         msg = str(e)
     return redirect(url_for('view', sid=sid, msg=msg))

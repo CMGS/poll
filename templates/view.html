@@ -41,7 +41,11 @@
     {% endfor %}
     </ul>
     <div class="form-action">
+        {% if isban(subject.id, g.user.username) %}
+        <a href="{{ url_for('index', q=q) }}">Voted, Back</button>
+        {% else %}
         <button type="submit">Vote</button>
+        {% endif %}
     </div>
 </form>
 {% endif %}
