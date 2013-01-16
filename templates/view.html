@@ -1,23 +1,45 @@
-<h3>{{ subject.groupobj.name }} {{ subject.creator }}</h3>
-<p>{{ subject.topic }}, <b>{{ votetype(subject.votetype) }}</b></p>
-{% if outdate(subject.deadline) %}
-    {% for v in votes %}
-        <p>{{ v.content }}|{{ v.count }}</p>
-    {% endfor %}
+{% extends "layout.html" %}
+
+{% macro get_vote_checkbox(votetype, value) %}
+{% if votetype == 1 %}
+<input type="checkbox" name="selected" value="{{ value }}" />
 {% else %}
-    <p> dead time {{ subject.deadline }} </p>
-    <form method="post" action="{{ url_for('vote', sid=subject.id) }}" >
-        {% for v in votes %}
-        <p>
-            {{ v.content }} count: {{ v.count }}
-            {% if subject.votetype == 1 %}
-            <input type="checkbox" name="selected" value="{{ v.id }}" />
-            {% else %}
-            <input type="radio" name="selected" value="{{ v.id }}" />
-            {% endif %}
-        </p>
-        {% endfor %}
-        <button type="submit">vote</button>
-    </form>
+<input type="radio" name="selected" value="{{ value }}" />
 {% endif %}
-<a href="{{ url_for('index', q=subject.groupobj.id) }}">back</a>
+{% endmacro %}
+
+{% block content %}
+<div class="subtitle">
+    <span class="r deadline">{{ subject.deadline }}</span>
+    <h2>{{ subject.topic }}</h2>
+</div>
+{% if outdate(subject.deadline) %}
+<ul class="poll-options poll-result">
+    {% for v in votes %}
+    <li class="line poll-option">
+    <div class="poll-count" {% if sum %}style="width: {{ v.count / sum * 600 }}px"{% endif %}></div>
+        <span class="poll-count-num r">{{ v.count }}</span>
+        <label>{{ v.count }}</label>
+    </li>
+    {% endfor %}
+</ul>
+<div class="form-action">
+    <a href="/">Back</button>
+</div>
+{% else %}
+<form method="post" action="{{ url_for('vote', sid=subject.id) }}" >
+    <ul class="poll-options">
+    {% for v in votes %}
+        <li class="line poll-option">
+            <div class="poll-count" {% if sum %}style="width: {{ v.count / sum * 600 }}px"{% endif %}></div>
+            <span class="poll-count-num r">{{ v.count }}</span>
+            <label>{{ get_vote_checkbox(subject.votetype, v.id) }} {{ v.content }}</label>
+        </li>
+    {% endfor %}
+    </ul>
+    <div class="form-action">
+        <button type="submit">Vote</button>
+    </div>
+</form>
+{% endif %}
+{% endblock %}
