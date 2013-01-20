@@ -19,34 +19,14 @@ $("#groups option[value={{ q }}]").attr('selected','selected');
 {% endblock %}
 
 {% block content %}
-<div class="group-list">
-    <select id="groups">
+<div class="group-list clearfix">
+    <select id="groups" class="r">
         <option value ="0">all</option>
         {% for g in groups %}
         <option value ="{{ g.id }}">{{ g.name }}</option>
         {% endfor %}
     </select>
 </div>
-<!-- <section class="inprogress">
-    <h2 class="section-title dashed">IN PROGRESS</h2>
-    <ul class="poll-list">
-        {% for s in inprogress %}
-        <li>
-            <a href="{{ url_for('view', sid=s.id) }}">{{ s.topic }}</a>
-        </li>
-        {% endfor %}
-    </ul>
-</section>
-<section class="closed">
-    <h2 class="section-title dashed">CLOSED</h2> 
-    <ul class="poll-list">
-        {% for s in closed %}
-        <li>
-            <a href="{{ url_for('view', sid=s.id) }}">{{ s.topic }}</a>
-        </li>
-        {% endfor %}
-    </ul>
-    </section>-->
     {% if inprogress %}
     <div class="subtitle">
         <h2>IN PROGRESS</h2>

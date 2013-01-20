@@ -47,7 +47,7 @@
     </ul>
     <div class="form-action">
         {% if ban %}
-        <a href="{{ url_for('index', q=q) }}">Voted, Back</button>
+        <a href="{{ url_for('index', q=q) }}" class="voted">Back</button>
         {% else %}
         <button type="submit">Vote</button>
         {% endif %}

@@ -355,6 +355,15 @@ hgroup h1 {
 
 .group-list {
     padding: 5px 20px;
-    background-color: #D9EDF7;
+    background-color: #D9E7EE;
     color: #3A87AD;
+    border-bottom: 1px solid #DDD; 
+}
+
+.form-action .voted {
+    background-color: #9BAEB8; 
+}
+
+.form-action .voted:hover {
+    background-color: #9CACB4; 
 }
