@@ -4,6 +4,8 @@
 import datetime
 
 def outdate(date):
+    if not date:
+        return True
     return datetime.date.today() > date
 
 def votetype(t):

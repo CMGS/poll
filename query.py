@@ -50,6 +50,8 @@ def create_subject(topic, group, deadline, votetype, options, creator):
         raise Exception('Group not exist')
     if votetype not in ['0', '1']:
         raise Exception('Vote type error')
+    if not deadline or datetime.datetime.strptime(deadline, '%Y-%m-%d'):
+        raise Exception('Not valid deadline')
     options = [o for o in options if o]
     if len(options) < 2:
         raise Exception('Invaild options number')
