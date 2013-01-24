@@ -1,0 +1,93 @@
+{% set write = True %}
+{% extends "layout.html" %}
+
+{% block title %}Modify a poll{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css" />
+<script type="text/javascript" src="/static/js/jquery.js"></script>
+<script type="text/javascript" src="/static/js/jquery-ui.js"></script>
+<script>
+    $(function() {
+        $("#deadline").datepicker({ dateFormat: "yy-mm-dd", constrainInput: true,
+            closeText: "Close", minDate: 1 });
+        $("#add").click(function(){
+            $("#options").append("<li><input name=\"options\" type=\"text\" /></li>");
+            return false;
+        });
+    });
+</script>
+{% endblock %}
+
+{% block content %}
+{% if exc %}
+<div class='msg'>{{ exc }}</div>
+{% endif %}
+<form method="POST" action="{{ url_for('modify', sid=subject.id)}}">
+    <div class="control-group clearfix">
+        <div class="control-label">
+            <label for="topic">Topic</label>
+        </div>
+        <div class="control">
+            <input id="topic" type="text" name="topic" value="{{ subject.topic }}"/>
+        </div>
+    </div>
+    <div class="control-group clearfix">
+        <div class="control-label">
+            <label for="deadline">Deadline</label>
+        </div>
+        <div class="control">
+            <input id="deadline" type="text" name="deadline" value="{{ subject.deadline }}"/>
+        </div>
+    </div>
+    <div class="control-group clearfix">
+        <div class="control-label">
+            <label for="group">Group</label>
+        </div>
+        <div class="control">
+            <select id="group" name="group">
+                {% for g in groups %}
+                {% if g.id != subject.groupobj.id %}
+                <option value="{{ g.id }}">{{ g.name }}</option>
+                {% else %}
+                <option selected="selected" value="{{ g.id }}">{{ g.name }}</option>
+                {% endif %}
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+    <div class="control-group clearfix">
+        <div class="control-label">
+            <label for="votetype">Type</label>
+        </div>
+        <div class="control">
+            <label class="checkbox inline">
+                <input type="radio" name="votetype" value="0" checked />Single
+            </label>
+            <label class="checkbox inline">
+                <input type="radio" name="votetype" value="1" />Multiple
+            </label>
+        </div>
+    </div>
+    <div class="control-group clearfix options-control">
+        <div class="control-label">
+            <label for="options">Options</label>
+        </div>
+        <div class="control">
+            <ul id="options">
+                {% for v in votes %}
+                <li>
+                    <input name="options" type="text" value="{{ v.content }}" />
+                    <input name="optionsid" type="hidden" value="{{ v.id }}" />
+                </li>
+                {% endfor %}
+                <li><input name="options" type="text" /></li>
+            </ul>
+            <a class="more-btn" id="add" href="###">More, I need more!</a>
+        </div>
+    </div>
+    <div class="form-action">
+        <button type="submit">Modify</button>
+    </div>
+</form>
+{% endblock %}

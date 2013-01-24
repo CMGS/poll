@@ -11,7 +11,13 @@
 <body>
 <!--<header class="clearfix">
     <div class="header-wrap">
-        <span class="r userarea">{% if user %}{{ user.name }}<span class="sep"></span><a href="{{ url_for('write') }}">Create</a>{% else %}{% endif %}</span>
+        <span class="r userarea">
+            {% if g.user %}{{ g.user.username }}
+            <span class="sep"></span>
+            <a href="{{ url_for('write') }}">Create</a>
+            {% else %}
+            {% endif %}
+        </span>
         <a href="#" class="current-group">{% if group %}{{ group }}{% else %}All{% endif %}</a>
     </div>
 </header>-->
@@ -35,7 +41,9 @@
 </div> -->
 <div class="wrap">
     <div class="title-and-create">
-        {% if not write %}
+        {% if modify %}
+        <a class="r plus-btn" href="{{ url_for('modify', sid=subject.id) }}">Modify</a>
+        {% elif not write%}
         <a class="r plus-btn" href="{{ url_for('write') }}">Create</a>
         {% endif %}
         <h1><a href="/">Poll</a></h1>

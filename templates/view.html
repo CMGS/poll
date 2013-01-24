@@ -19,7 +19,7 @@
     <li class="line poll-option">
     <div class="poll-count" {% if sum %}style="width: {{ v.count / sum * 600 }}px"{% endif %}></div>
         <span class="poll-count-num r">{{ v.count }}</span>
-        <label>{{ v.count }}</label>
+        <label>{{ v.content }}</label>
     </li>
     {% endfor %}
 </ul>

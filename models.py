@@ -51,6 +51,14 @@ class Subject(db.Model):
         db.session.commit()
         return subject
 
+    def modify(self, topic, deadline, votetype, group):
+        self.topic = topic
+        self.deadline = deadline
+        self.group = group
+        self.votetype = votetype
+        db.session.add(self)
+        db.session.commit()
+
     def __unicode__(self):
         return self.topic
 
@@ -78,6 +86,15 @@ class Vote(db.Model):
         db.session.add(self)
         db.session.commit()
         return self
+
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
+
+    def update(self, content):
+        self.content = content
+        db.session.add(self)
+        db.session.commit()
 
 class Ban(db.Model):
     __tablename__ = 'ban'

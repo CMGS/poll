@@ -11,7 +11,8 @@ from sheep.api.sessions import SessionMiddleware, \
 from models import init_db
 from query import get_subjects, get_votes, \
         update_votes, get_groups, get_group, \
-        create_subject, get_ban
+        create_subject, get_ban, get_subject, \
+        modify_subject
 from utils import outdate, votetype
 
 app = Flask(__name__)
@@ -39,7 +40,7 @@ app.wsgi_app = SessionMiddleware(app.wsgi_app, \
 def index():
     q = request.args.get('q', '')
     inprogress, closed = get_subjects(q)
-    return render_template('index.html', user=g.user, \
+    return render_template('index.html', \
             inprogress = inprogress, \
             closed = closed, \
             groups=get_groups(), \
@@ -56,9 +57,10 @@ def view(sid):
     q = '' or subject.groupobj.id
     sum_count = sum([v.count for v in votes])
     ban = get_ban(subject.id, g.user.name)
+    modify = subject.creator == g.user.name
     return render_template('view.html', subject=subject, \
             votes=votes, sum = sum_count, q = q, \
-            msg = msg, ban = ban)
+            msg = msg, ban = ban, modify = modify)
 
 @app.route('/vote/<int:sid>/', methods=['POST'])
 def vote(sid):
@@ -73,8 +75,7 @@ def vote(sid):
 @app.route('/write/', methods=['GET', 'POST'])
 def write():
     if request.method == 'GET':
-        return render_template('write.html', user=g.user, \
-                groups=get_groups())
+        return render_template('write.html', groups=get_groups())
     topic = request.form.get('topic')
     group = request.form.get('group')
     deadline = request.form.get('deadline')
@@ -83,10 +84,31 @@ def write():
     try:
         create_subject(topic, group, deadline, votetype, options, g.user.name)
     except Exception, e:
-        return render_template('write.html', user=g.user, \
-                groups=get_groups(), exc=str(e))
+        return render_template('write.html', groups=get_groups(), exc=str(e))
     else:
         return redirect(url_for('index', q=group))
+
+@app.route('/modify/<int:sid>/', methods=['GET', 'POST'])
+def modify(sid):
+    subject = get_subject(sid)
+    if not subject or subject.creator != g.user.name:
+        return redirect(url_for('index'))
+    if request.method == 'GET':
+        return render_template('modify.html', subject=subject, \
+                groups=get_groups(), votes=get_votes(sid))
+    topic = request.form.get('topic')
+    group = request.form.get('group')
+    deadline = request.form.get('deadline')
+    votetype = request.form.get('votetype')
+    options = request.form.getlist('options')
+    optionsid = request.form.getlist('optionsid')
+    try:
+        modify_subject(subject, topic, group, deadline, votetype, options, optionsid)
+    except Exception, e:
+        return render_template('modify.html', subject=subject, \
+                groups=get_groups(), votes=get_votes(sid), exc=str(e))
+    else:
+        return redirect(url_for('view', sid=subject.id))
 
 @app.before_request
 def before():
